@@ -63,12 +63,12 @@
 	<!-- min-h-screen bg-gradient-to-br from-background via-background to-muted/20 -->
 	<div class="container mx-auto text-white py-4 px-8 flex flex-col gap-5">
 		<section
-			class="search new_task border border-gray-700 py-4 px-8 w-full flex items-center justify-between rounded-lg flex gap-5"
+			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-between rounded-lg flex gap-5"
 		>
 			<form class="w-full">
 				<label
 					for="default-search"
-					class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+					class="mb-2 text-sm font-medium text-gray-400 sr-only dark:text-white"
 					>Search</label
 				>
 				<div class="relative">
@@ -76,7 +76,7 @@
 						class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
 					>
 						<svg
-							class="w-4 h-4 text-gray-500 dark:text-gray-400"
+							class="w-4 h-4 text-gray-200"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -94,27 +94,27 @@
 					<input
 						type="search"
 						id="default-search"
-						class="block w-full p-2 ps-10 text-sm text-gray-300 border border-gray-700 rounded-lg bg-[#0b0b0b] focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
+						class="block w-full p-2 ps-10 text-sm text-gray-300 border border-gray-400 rounded-lg placeholder:text-gray-400 focus:border-gray-400 focus:outline-gray-400"
 						placeholder="Buscar tarea..."
 						required
 					/>
 				</div>
 			</form>
 			<button
-				class="bg-white text-gray-700 rounded-lg px-4 py-2 ml-auto flex items-center justify-center gap-3 hover:bg-gray-200 hover:cursor-pointer w-43 text-sm"
+				class="bg-white text-gray-800 rounded-lg px-4 py-2 ml-auto flex items-center justify-center gap-3 hover:bg-gray-200 hover:cursor-pointer w-43 text-sm"
 				@click="openModal"
 			>
 				<Icon name="material-symbols:add" class="text-[1.2em]" /> Nueva Tarea
 			</button>
 		</section>
 		<section
-			class="search new_task border border-gray-700 py-4 px-8 w-full flex items-center justify-start rounded-lg flex gap-2"
+			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-start rounded-lg flex gap-2"
 		>
 			<button
 				type="button"
 				:class="
 					filterSelected === 'all'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-300 bg-white text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 				"
 			>
@@ -129,8 +129,8 @@
 				type="button"
 				:class="
 					filterSelected === 'created'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-300 bg-white text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon name="streamline-emojis:file-folder" class="text-[1.6em]" />
@@ -145,8 +145,8 @@
 				type="button"
 				:class="
 					filterSelected === 'current'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-300 bg-white text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon
@@ -164,8 +164,8 @@
 				type="button"
 				:class="
 					filterSelected === 'completed'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-300 bg-white text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon name="fluent-color:checkmark-circle-20" class="text-[1.6em]" />
@@ -218,18 +218,20 @@
 								}}</span
 							>
 
-							<div class="border border-gray-700 text-sm px-4 rounded-full">
+							<div
+								class="border border-gray-700 text-sm px-4 rounded-full py-1"
+							>
 								📝 {{ task.status }}
 							</div>
 							<div
-								class="border border-gray-700 text-sm px-4 rounded-full cursor-pointer bg-red-900"
+								class="border border-gray-700 text-sm px-4 rounded-full cursor-pointer bg-red-900/70 py-1"
 								v-if="task.cync === false"
 								@click="cyncTasks(task)"
 							>
 								Sin sincronizar
 							</div>
 							<div
-								class="border border-gray-700 text-sm px-4 rounded-full"
+								class="border border-gray-700 text-sm px-4 rounded-full cursor-default bg-green-900/70 py-1"
 								v-else
 							>
 								Sincronizado
@@ -252,7 +254,7 @@
 							>
 								<Icon
 									name="fluent-color:checkmark-circle-20"
-									class="text-[1.6em]"
+									class="text-[1em]"
 								/>
 								Completar
 							</button>

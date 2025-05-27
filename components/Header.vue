@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="header bg-[#0b0b0b] text-white py-4 px-8 flex items-center justify-between container mx-auto"
+		class="header text-white py-4 px-8 flex items-center justify-between container mx-auto mt-5"
 	>
 		<div class="title_status flex items-center gap-3">
 			<h2 class="text-4xl font-bold">Task APP</h2>
