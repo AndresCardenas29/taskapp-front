@@ -65,7 +65,7 @@
 		<section
 			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-between rounded-lg flex gap-5"
 		>
-			<form class="w-full">
+			<div class="w-full">
 				<label
 					for="default-search"
 					class="mb-2 text-sm font-medium text-gray-400 sr-only dark:text-white"
@@ -93,13 +93,13 @@
 					</div>
 					<input
 						type="search"
-						id="default-search"
+						v-model="search"
+						autocomplete="off"
 						class="block w-full p-2 ps-10 text-sm text-gray-300 border border-gray-400 rounded-lg placeholder:text-gray-400 focus:border-gray-400 focus:outline-gray-400"
 						placeholder="Buscar tarea..."
-						required
 					/>
 				</div>
-			</form>
+			</div>
 			<button
 				class="bg-white text-gray-800 rounded-lg px-4 py-2 ml-auto flex items-center justify-center gap-3 hover:bg-gray-200 hover:cursor-pointer w-43 text-sm"
 				@click="openModal"
@@ -114,8 +114,8 @@
 				type="button"
 				:class="
 					filterSelected === 'all'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 				"
 			>
 				📋 Todas
@@ -129,8 +129,8 @@
 				type="button"
 				:class="
 					filterSelected === 'created'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon name="streamline-emojis:file-folder" class="text-[1.6em]" />
@@ -145,8 +145,8 @@
 				type="button"
 				:class="
 					filterSelected === 'current'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon
@@ -164,8 +164,8 @@
 				type="button"
 				:class="
 					filterSelected === 'completed'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-1 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
+						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
 			>
 				<Icon name="fluent-color:checkmark-circle-20" class="text-[1.6em]" />
@@ -200,7 +200,7 @@
 			>
 				<div
 					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2 transition-all"
-					v-for="(task, idx) in tasks"
+					v-for="(task, idx) in filteredTasks"
 					:key="idx"
 					:class="statusClass(task.status)"
 				>
@@ -298,6 +298,7 @@ export default {
 				title: "",
 				description: "",
 			},
+			search: "",
 		};
 	},
 	computed: {
@@ -328,6 +329,16 @@ export default {
 			});
 
 			return counts;
+		},
+		filteredTasks() {
+			if (!this.search) return this.tasks;
+
+			const term = this.search.toLowerCase();
+			return this.tasks.filter(
+				(task) =>
+					task.title.toLowerCase().includes(term) ||
+					task.description.toLowerCase().includes(term)
+			);
 		},
 	},
 	methods: {
@@ -380,11 +391,11 @@ export default {
 				case "created":
 					return "bg-blue-500/30 text-white";
 				case "doing":
-					return "bg-yellow-300/20 text-white";
+					return "bg-yellow-300/20 text-white border-yellow-400";
 				case "completed":
-					return "bg-green-600/20 text-white";
+					return "bg-green-600/20 text-white border-green-600";
 				case "deleted":
-					return "bg-red-500/30 text-white";
+					return "bg-red-500/30 text-white border-red-400";
 			}
 		},
 	},
