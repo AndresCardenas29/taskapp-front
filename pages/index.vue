@@ -179,7 +179,7 @@
 		<section
 			:class="
 				tasks.length == 0
-					? 'rounded-lg border text-card-foreground shadow-sm border-dashed border-2 border-gray-700 flex items-center justify-between space-x-2'
+					? 'rounded-lg border text-card-foreground shadow-sm border-dashed border-2 border-gray-500 flex items-center justify-between space-x-2 bg-black/10'
 					: 'rounded-lg text-card-foreground shadow-sm borborder-gray-700 flex items-center justify-between space-x-2'
 			"
 		>
@@ -199,9 +199,10 @@
 				class="rounded-lg text-card-foreground shadow-sm transition-all hover:shadow-lg w-full flex flex-col gap-4"
 			>
 				<div
-					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2"
+					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2 transition-all"
 					v-for="(task, idx) in tasks"
 					:key="idx"
+					:class="statusClass(task.status)"
 				>
 					<div class="flex-1">
 						<h3>{{ task.title }}</h3>
@@ -219,7 +220,7 @@
 							>
 
 							<div
-								class="border border-gray-700 text-sm px-4 rounded-full py-1"
+								class="border border-gray-700 text-sm px-4 rounded-full py-1 transition-all"
 							>
 								📝 {{ task.status }}
 							</div>
@@ -242,6 +243,7 @@
 						<div class="flex flex-row items-center justify-center space-x-2">
 							<button
 								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1"
+								@click="startTask(task)"
 							>
 								<Icon
 									name="streamline-emojis:hourglass-not-done-2"
@@ -251,6 +253,7 @@
 							</button>
 							<button
 								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1"
+								@click="completeTask(task)"
 							>
 								<Icon
 									name="fluent-color:checkmark-circle-20"
@@ -260,6 +263,7 @@
 							</button>
 							<button
 								class="text-[1.5em] bg-red-900 text-white hover:bg-red-700 flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer"
+								@click="deleteTask(task)"
 							>
 								<Icon name="material-symbols:delete-outline-sharp" />
 							</button>
@@ -280,9 +284,10 @@ export default {
 			filterSelected: "all",
 			tasks: [
 				{
+					id: 1,
 					title: "Tarea 1",
 					description: "Descripción de la tarea 1",
-					status: "current",
+					status: "created",
 					created_at: new Date(),
 					updated_at: "null",
 					cync: false,
@@ -339,9 +344,10 @@ export default {
 			if (!this.newTask.title) return;
 			// Lóígica
 			this.tasks.push({
+				id: Math.random() * 1000 + 1,
 				title: this.newTask.title,
 				description: this.newTask.description,
-				status: "current",
+				status: "created",
 				created_at: new Date(),
 				updated_at: "null",
 			});
@@ -361,6 +367,24 @@ export default {
 			const index = this.tasks.indexOf(task);
 			if (index !== -1) {
 				this.tasks.splice(index, 1);
+			}
+		},
+		startTask(task) {
+			task.status = "doing";
+		},
+		completeTask(task) {
+			task.status = "completed";
+		},
+		statusClass(status) {
+			switch (status) {
+				case "created":
+					return "bg-blue-500/30 text-white";
+				case "doing":
+					return "bg-yellow-300/20 text-white";
+				case "completed":
+					return "bg-green-600/20 text-white";
+				case "deleted":
+					return "bg-red-500/30 text-white";
 			}
 		},
 	},
