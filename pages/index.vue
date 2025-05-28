@@ -447,7 +447,7 @@ export default {
 			if (index !== -1) {
 				this.tasks.splice(index, 1);
 			} */
-			task.status = "doing";
+			task.status = "deleted";
 			task.updated_at = new Date();
 			task.pendingSync = true;
 
