@@ -44,7 +44,8 @@
 					<input
 						type="submit"
 						value="Crear tarea"
-						class="bg-white text-black font-medium rounded-lg shadow-md px-4 py-2 w-full text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer"
+						:disabled="isCreatingTask"
+						class="bg-white text-black font-medium rounded-lg shadow-md px-4 py-2 w-full text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer disabled:bg-gray-600 disabled:hover:cursor-wait"
 						@click="createTask"
 					/>
 					<input
@@ -286,17 +287,7 @@ export default {
 		return {
 			taskStatuses: ["all", "created", "doing", "pending", "deleted"],
 			filterSelected: "all",
-			tasks: [
-				/* {
-					id: 1,
-					title: "Tarea 1",
-					description: "Descripción de la tarea 1",
-					status: "created",
-					created_at: new Date(),
-					updated_at: "null",
-					cync: false,
-				}, */
-			],
+			tasks: [],
 			showModal: false,
 			newTask: {
 				title: "",
@@ -304,6 +295,7 @@ export default {
 			},
 			search: "",
 			serverStatus: false,
+			isCreatingTask: false,
 		};
 	},
 	computed: {
@@ -368,7 +360,9 @@ export default {
 		},
 		createTask(e) {
 			e.preventDefault();
-			if (!this.newTask.title) return;
+			if (!this.newTask.title || this.isCreatingTask) return;
+
+			this.isCreatingTask = true;
 
 			const nuevaTarea = {
 				title: this.newTask.title,
@@ -407,6 +401,7 @@ export default {
 					});
 				})
 				.finally(() => {
+					this.isCreatingTask = false;
 					this.closeModal();
 				});
 
@@ -421,44 +416,40 @@ export default {
 			});
 			this.closeModal(); */
 		},
-		syncTasks(task) {
-			setTimeout(() => {
-				// intenta actualizar en el backend
-				fetch(`${BACKEND_URL}/tasks/${task.id}`, {
-					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(task),
-				})
-					.then((res) => res.json())
-					.then((data) => {
-						// Actualiza la tarea con la respuesta del backend
-						Object.assign(task, {
-							...data,
-							updated_at: new Date(data.updated_at),
-							pendingSync: false,
-						});
+		syncTasks() {
+			// obtiene las tareas sin sinronizar del local storage
+			const pendingTasks = this.tasks.filter((t) => t.pendingSync);
+			console.log(pendingTasks);
 
-						console.log({
-							...data,
-							updated_at: new Date(data.updated_at),
-							pendingSync: false,
-						});
-					})
-					.catch((err) => {
-						console.log({ err });
-						task.pendingSync = true;
-					});
-			}, 1500);
+			fetch(`${BACKEND_URL}/tasks/sync`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(pendingTasks),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					console.log("Tasks synced:", data);
+					if (data.error) {
+						console.error("Error syncing tasks:", data.error);
+					} else {
+						console.log("Tasks synced successfully");
+						this.getTasks();
+					}
+				})
+				.catch((err) => {
+					console.error(err);
+				});
 		},
 		deleteTask(task) {
-			const index = this.tasks.indexOf(task);
+			/* const index = this.tasks.indexOf(task);
 			if (index !== -1) {
 				this.tasks.splice(index, 1);
-			}
-			task.status = "deleted";
+			} */
+			task.status = "doing";
 			task.updated_at = new Date();
+			task.pendingSync = true;
 
 			// intenta actualizar en el backend
 			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
@@ -473,7 +464,6 @@ export default {
 					// Actualiza la tarea con la respuesta del backend
 					Object.assign(task, {
 						...data,
-						created_at: new Date(data.created_at),
 						updated_at: new Date(data.updated_at),
 						pendingSync: false,
 					});
@@ -486,6 +476,7 @@ export default {
 		startTask(task) {
 			task.status = "doing";
 			task.updated_at = new Date();
+			task.pendingSync = true;
 
 			// intenta actualizar en el backend
 			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
@@ -499,12 +490,6 @@ export default {
 				.then((data) => {
 					// Actualiza la tarea con la respuesta del backend
 					Object.assign(task, {
-						...data,
-						updated_at: new Date(data.updated_at),
-						pendingSync: false,
-					});
-
-					console.log({
 						...data,
 						updated_at: new Date(data.updated_at),
 						pendingSync: false,
@@ -518,6 +503,7 @@ export default {
 		completeTask(task) {
 			task.status = "completed";
 			task.updated_at = new Date();
+			task.pendingSync = true;
 
 			// intenta actualizar en el backend
 			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
@@ -558,12 +544,43 @@ export default {
 			this.filterStatus = status;
 		},
 		checkServerStatus() {
+			console.log("Checking server status...");
+
 			fetch(`${BACKEND_URL}/tasks`, { method: "HEAD" })
 				.then((res) => {
 					this.serverStatus = res.ok;
 				})
 				.catch(() => {
 					this.serverStatus = false;
+				});
+		},
+		getTasks() {
+			// Intenta traer las tareas del backend
+			fetch(`${BACKEND_URL}/tasks`)
+				.then((res) => res.json())
+				.then((datajson) => datajson.data)
+				.then((data) => {
+					// Convierte las fechas de string a Date si es necesario
+					this.tasks = data.map((task) => ({
+						...task,
+						created_at: new Date(task.created_at),
+					}));
+
+					// Actualiza localStorage con los datos del backend
+					localStorage.setItem("tasks", JSON.stringify(this.tasks.data));
+				})
+				.catch((err) => {
+					console.log({ err });
+					this.serverStatus = false;
+
+					// Si falla, usa localStorage como respaldo
+					const saved = localStorage.getItem("tasks");
+					if (saved) {
+						this.tasks = JSON.parse(saved).map((task) => ({
+							...task,
+							created_at: new Date(task.created_at),
+						}));
+					}
 				});
 		},
 	},
@@ -612,7 +629,15 @@ export default {
 		});
 
 		// Hacer ping al backend cada 10 segundos
-		this.pingInterval = setInterval(this.checkServerStatus, 10000);
+		this.pingInterval = setInterval(() => {
+			this.checkServerStatus();
+			if (this.serverStatus) {
+				console.log("sincronizando datos... ");
+				this.syncTasks();
+			} else {
+				console.log("tasks no sincronizados");
+			}
+		}, 10000);
 	},
 	watch: {
 		// Guarda en localStorage cada vez que tasks cambia
