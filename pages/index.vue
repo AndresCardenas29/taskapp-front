@@ -5,7 +5,7 @@
 		v-if="showModal"
 	>
 		<div
-			class="form border-1 border-gray-800 rounded-lg shadow-md px-6 py-4 w-sm text-white font-medium border-b bg-[#0b0b0b]"
+			class="form border-1 border-gray-800 rounded-lg shadow-md px-6 py-4 w-sm text-white font-medium border-b bg-[#0b0b0b]/80"
 		>
 			<div
 				class="modal-head flex flex-row gap-2 item-center justify-between mt-2 mb-4"
@@ -24,7 +24,7 @@
 					<input
 						type="text"
 						id="default-search"
-						class="border border-gray-700 rounded-lg shadow-md px-4 py-2 w-full text-white font-medium border-b focus:outline-none focus:ring-4 focus:ring-gray-300"
+						class="border border-gray-700 rounded-lg shadow-md px-4 py-2 w-full text-white font-medium border-b focus:outline-none focus:ring-1 focus:ring-gray-300"
 						placeholder="Titlulo de la tarea"
 						v-model="newTask.title"
 						autocomplete="off"
@@ -32,10 +32,9 @@
 				</div>
 				<div class="description mb-4">
 					<span>Descripción:</span>
-					<input
-						type="text"
+					<textarea
 						id="default-search"
-						class="border border-gray-700 rounded-lg shadow-md px-4 py-2 w-full text-white font-medium border-b focus:outline-none focus:ring-4 focus:ring-gray-300"
+						class="border border-gray-700 rounded-lg shadow-md px-4 py-2 w-full text-white font-medium border-b focus:outline-none focus:ring-1 focus:ring-gray-300 min-h-[100px] max-h-[200px]"
 						placeholder="Descripción opcional"
 						v-model="newTask.description"
 						autocomplete="off"
@@ -59,7 +58,7 @@
 		</div>
 	</div>
 	<!-- End Modal -->
-	<Header />
+	<Header :serverStatusH="serverStatus" />
 	<!-- min-h-screen bg-gradient-to-br from-background via-background to-muted/20 -->
 	<div class="container mx-auto text-white py-4 px-8 flex flex-col gap-5">
 		<section
@@ -115,8 +114,9 @@
 				:class="
 					filterSelected === 'all'
 						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-gray-800 bg-black text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
+						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
+				@click="filterSelected = 'all'"
 			>
 				📋 Todas
 				<span
@@ -132,6 +132,7 @@
 						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
+				@click="filterSelected = 'created'"
 			>
 				<Icon name="streamline-emojis:file-folder" class="text-[1.6em]" />
 				<span>Creadas</span>
@@ -144,10 +145,11 @@
 			<button
 				type="button"
 				:class="
-					filterSelected === 'current'
+					filterSelected === 'doing'
 						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
+				@click="filterSelected = 'doing'"
 			>
 				<Icon
 					name="streamline-emojis:hourglass-not-done-2"
@@ -167,6 +169,7 @@
 						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
 						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
 				"
+				@click="filterSelected = 'completed'"
 			>
 				<Icon name="fluent-color:checkmark-circle-20" class="text-[1.6em]" />
 				<span>Completadas</span>
@@ -226,8 +229,8 @@
 							</div>
 							<div
 								class="border border-gray-700 text-sm px-4 rounded-full cursor-pointer bg-red-900/70 py-1"
-								v-if="task.cync === false"
-								@click="cyncTasks(task)"
+								v-if="task.pendingSync === true"
+								@click="syncTasks(task)"
 							>
 								Sin sincronizar
 							</div>
@@ -276,6 +279,7 @@
 </template>
 
 <script>
+import { BACKEND_URL } from "@/config/env";
 export default {
 	name: "Home",
 	data() {
@@ -283,7 +287,7 @@ export default {
 			taskStatuses: ["all", "created", "doing", "pending", "deleted"],
 			filterSelected: "all",
 			tasks: [
-				{
+				/* {
 					id: 1,
 					title: "Tarea 1",
 					description: "Descripción de la tarea 1",
@@ -291,7 +295,7 @@ export default {
 					created_at: new Date(),
 					updated_at: "null",
 					cync: false,
-				},
+				}, */
 			],
 			showModal: false,
 			newTask: {
@@ -299,6 +303,7 @@ export default {
 				description: "",
 			},
 			search: "",
+			serverStatus: false,
 		};
 	},
 	computed: {
@@ -331,14 +336,25 @@ export default {
 			return counts;
 		},
 		filteredTasks() {
-			if (!this.search) return this.tasks;
-
 			const term = this.search.toLowerCase();
-			return this.tasks.filter(
-				(task) =>
-					task.title.toLowerCase().includes(term) ||
-					task.description.toLowerCase().includes(term)
-			);
+
+			// Orden personalizado: doing > created > completed > deleted
+			const order = { doing: 0, created: 1, completed: 2, deleted: 3 };
+
+			// Primero filtra, luego ordena
+			return this.tasks
+				.filter((task) => {
+					const matchesSearch =
+						task.title.toLowerCase().includes(term) ||
+						(task.description && task.description.toLowerCase().includes(term));
+					const matchesFilter =
+						this.filterSelected === "all" ||
+						task.status === this.filterSelected;
+					return matchesSearch && matchesFilter;
+				})
+				.sort((a, b) => {
+					return (order[a.status] ?? 99) - (order[b.status] ?? 99);
+				});
 		},
 	},
 	methods: {
@@ -353,8 +369,49 @@ export default {
 		createTask(e) {
 			e.preventDefault();
 			if (!this.newTask.title) return;
+
+			const nuevaTarea = {
+				title: this.newTask.title,
+				description: this.newTask.description,
+				status: "created",
+				created_at: new Date(),
+				updated_at: new Date(),
+			};
+
+			// Intenta guardar en el backend
+			fetch(`${BACKEND_URL}/tasks`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(nuevaTarea),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					// Si el backend responde con la tarea creada, úsala
+					this.tasks.push({
+						...data,
+						created_at: new Date(data.created_at),
+						updated_at: new Date(data.updated_at),
+						pendingSync: false,
+					});
+				})
+				.catch((err) => {
+					console.log(err);
+
+					// Si falla, agrega la tarea localmente y márcala como no sincronizada
+					this.tasks.push({
+						...nuevaTarea,
+						id: -(Math.random() * 1000 + 1),
+						pendingSync: true,
+					});
+				})
+				.finally(() => {
+					this.closeModal();
+				});
+
 			// Lóígica
-			this.tasks.push({
+			/* this.tasks.push({
 				id: Math.random() * 1000 + 1,
 				title: this.newTask.title,
 				description: this.newTask.description,
@@ -362,13 +419,13 @@ export default {
 				created_at: new Date(),
 				updated_at: "null",
 			});
-			this.closeModal();
+			this.closeModal(); */
 		},
-		cyncTasks(task) {
+		syncTasks(task) {
 			setTimeout(() => {
 				const tsk = this.tasks.find((t) => t.id === task.id);
 				if (tsk) {
-					tsk.cync = !tsk.cync;
+					tsk.pendingSync = !tsk.pendingSync;
 				} else {
 					alert("Task not found");
 				}
@@ -379,12 +436,85 @@ export default {
 			if (index !== -1) {
 				this.tasks.splice(index, 1);
 			}
+			task.status = "deleted";
+			task.updated_at = new Date();
+
+			// intenta actualizar en el backend
+			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(task),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					// Actualiza la tarea con la respuesta del backend
+					Object.assign(task, {
+						...data,
+						created_at: new Date(data.created_at),
+						updated_at: new Date(data.updated_at),
+						pendingSync: false,
+					});
+				})
+				.catch((err) => {
+					console.log({ err });
+					task.pendingSync = true;
+				});
 		},
 		startTask(task) {
 			task.status = "doing";
+			task.updated_at = new Date();
+
+			// intenta actualizar en el backend
+			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(task),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					// Actualiza la tarea con la respuesta del backend
+					Object.assign(task, {
+						...data,
+						created_at: new Date(data.created_at),
+						updated_at: new Date(data.updated_at),
+						pendingSync: false,
+					});
+				})
+				.catch((err) => {
+					console.log({ err });
+					task.pendingSync = true;
+				});
 		},
 		completeTask(task) {
 			task.status = "completed";
+			task.updated_at = new Date();
+
+			// intenta actualizar en el backend
+			fetch(`${BACKEND_URL}/tasks/${task.id}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(task),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					// Actualiza la tarea con la respuesta del backend
+					Object.assign(task, {
+						...data,
+						created_at: new Date(data.created_at),
+						updated_at: new Date(data.updated_at),
+						pendingSync: false,
+					});
+				})
+				.catch((err) => {
+					console.log({ err });
+					task.pendingSync = true;
+				});
 		},
 		statusClass(status) {
 			switch (status) {
@@ -398,8 +528,88 @@ export default {
 					return "bg-red-500/30 text-white border-red-400";
 			}
 		},
+		selectFilter(status) {
+			this.filterStatus = status;
+		},
+		checkServerStatus() {
+			fetch(`${BACKEND_URL}/tasks`, { method: "HEAD" })
+				.then((res) => {
+					this.serverStatus = res.ok;
+				})
+				.catch(() => {
+					this.serverStatus = false;
+				});
+		},
+	},
+	mounted() {
+		// Cargar tareas desde localStorage al iniciar
+		const saved = localStorage.getItem("tasks");
+		if (saved) {
+			// Convierte las fechas de string a Date si es necesario
+			this.tasks = JSON.parse(saved).map((task) => ({
+				...task,
+				created_at: new Date(task.created_at),
+			}));
+		}
+
+		// Intenta traer las tareas del backend
+		fetch(`${BACKEND_URL}/tasks`)
+			.then((res) => res.json())
+			.then((datajson) => datajson.data)
+			.then((data) => {
+				// Convierte las fechas de string a Date si es necesario
+				this.tasks = data.map((task) => ({
+					...task,
+					created_at: new Date(task.created_at),
+				}));
+
+				// Actualiza localStorage con los datos del backend
+				localStorage.setItem("tasks", JSON.stringify(this.tasks.data));
+			})
+			.catch((err) => {
+				console.log({ err });
+				this.serverStatus = false;
+
+				// Si falla, usa localStorage como respaldo
+				const saved = localStorage.getItem("tasks");
+				if (saved) {
+					this.tasks = JSON.parse(saved).map((task) => ({
+						...task,
+						created_at: new Date(task.created_at),
+					}));
+				}
+			});
+
+		window.addEventListener("online", this.checkServerStatus);
+		window.addEventListener("offline", () => {
+			this.serverStatus = false;
+		});
+
+		// Hacer ping al backend cada 10 segundos
+		this.pingInterval = setInterval(this.checkServerStatus, 10000);
+	},
+	watch: {
+		// Guarda en localStorage cada vez que tasks cambia
+		tasks: {
+			handler(newTasks) {
+				localStorage.setItem("tasks", JSON.stringify(newTasks));
+			},
+			deep: true,
+		},
+	},
+	beforeUnmount() {
+		// Limpia el intervalo al salir de la página
+		clearInterval(this.pingInterval);
+		window.removeEventListener("online", this.checkServerStatus);
+		window.removeEventListener("offline", () => {
+			this.serverStatus = false;
+		});
 	},
 };
+
+useHead({
+	title: "Task App | Andres Cardenas",
+});
 </script>
 
 <!-- import css file -->
