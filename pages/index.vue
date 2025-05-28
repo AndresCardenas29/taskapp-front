@@ -423,13 +423,34 @@ export default {
 		},
 		syncTasks(task) {
 			setTimeout(() => {
-				const tsk = this.tasks.find((t) => t.id === task.id);
-				if (tsk) {
-					tsk.pendingSync = !tsk.pendingSync;
-				} else {
-					alert("Task not found");
-				}
-			}, 3000);
+				// intenta actualizar en el backend
+				fetch(`${BACKEND_URL}/tasks/${task.id}`, {
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(task),
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						// Actualiza la tarea con la respuesta del backend
+						Object.assign(task, {
+							...data,
+							updated_at: new Date(data.updated_at),
+							pendingSync: false,
+						});
+
+						console.log({
+							...data,
+							updated_at: new Date(data.updated_at),
+							pendingSync: false,
+						});
+					})
+					.catch((err) => {
+						console.log({ err });
+						task.pendingSync = true;
+					});
+			}, 1500);
 		},
 		deleteTask(task) {
 			const index = this.tasks.indexOf(task);
@@ -479,7 +500,12 @@ export default {
 					// Actualiza la tarea con la respuesta del backend
 					Object.assign(task, {
 						...data,
-						created_at: new Date(data.created_at),
+						updated_at: new Date(data.updated_at),
+						pendingSync: false,
+					});
+
+					console.log({
+						...data,
 						updated_at: new Date(data.updated_at),
 						pendingSync: false,
 					});
