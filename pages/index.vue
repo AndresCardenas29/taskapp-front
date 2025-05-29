@@ -61,7 +61,10 @@
 	<!-- End Modal -->
 	<Header :serverStatusH="serverStatus" />
 	<!-- min-h-screen bg-gradient-to-br from-background via-background to-muted/20 -->
-	<div class="container max-w-6xl mx-auto text-white py-4 px-8 flex flex-col gap-5">
+	<div
+		class="container max-w-6xl mx-auto text-white py-4 px-8 flex flex-col gap-5"
+	>
+	<!-- Busqueda y crear tarea -->
 		<section
 			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-between rounded-lg flex gap-5"
 		>
@@ -101,14 +104,16 @@
 				</div>
 			</div>
 			<button
-				class="bg-white text-gray-800 rounded-lg px-4 py-2 ml-auto flex items-center justify-center gap-3 hover:bg-gray-200 hover:cursor-pointer w-43 text-sm"
+				class="bg-white text-gray-800 rounded-lg px-4 py-2 ml-auto flex items-center justify-center gap-3 hover:bg-gray-200 hover:cursor-pointer sm:w-43 text-sm"
 				@click="openModal"
 			>
-				<Icon name="material-symbols:add" class="text-[1.2em]" /> Nueva Tarea
+				<Icon name="material-symbols:add" class="text-[1.2em]" />
+				<span class="hidden sm:block">Nueva Tarea</span>
 			</button>
 		</section>
+		<!-- Filtros de tareas -->
 		<section
-			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-start rounded-lg flex gap-2"
+			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-start rounded-lg flex gap-2 overflow-hidden overflow-x-auto"
 		>
 			<button
 				type="button"
@@ -119,7 +124,7 @@
 				"
 				@click="filterSelected = 'all'"
 			>
-				📋 Todas
+				<span class="min-w-18">📋 Todas</span>
 				<span
 					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
 					>{{ filterCounts.all }}</span
@@ -156,7 +161,7 @@
 					name="streamline-emojis:hourglass-not-done-2"
 					class="text-[1.6em]"
 				/>
-				<span>En Progreso</span>
+				<span class="min-w-21">En Progreso</span>
 				<span
 					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
 					>{{ filterCounts.doing }}</span
@@ -180,6 +185,7 @@
 				>
 			</button>
 		</section>
+		<!-- Tasks section -->
 		<section
 			:class="
 				tasks.length == 0
@@ -203,7 +209,7 @@
 				class="rounded-lg text-card-foreground shadow-sm transition-all hover:shadow-lg w-full flex flex-col gap-4"
 			>
 				<div
-					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2 transition-all"
+					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2 transition-all overflow-hidden overflow-x-auto"
 					v-for="(task, idx) in filteredTasks"
 					:key="idx"
 					:class="statusClass(task.status)"
@@ -212,7 +218,7 @@
 						<h3>{{ task.title }}</h3>
 						<p class="text-gray-400 text-sm">{{ task.description }}</p>
 						<div class="info flex flex-row gap-4 mt-3">
-							<span class="text-gray-400 text-sm">
+							<span class="text-gray-400 text-sm w-30">
 								📅
 								{{
 									task.created_at.getDate() +
@@ -224,7 +230,7 @@
 							>
 
 							<div
-								class="border border-gray-700 text-sm px-4 rounded-full py-1 transition-all"
+								class="border border-gray-700 text-sm px-4 rounded-full py-1 transition-all w-32"
 							>
 								📝 {{ task.status }}
 							</div>
@@ -246,7 +252,7 @@
 					<div class="flex flex-row items-start justify-center space-x-2">
 						<div class="flex flex-row items-center justify-center space-x-2">
 							<button
-								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1"
+								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1  w-30"
 								@click="startTask(task)"
 							>
 								<Icon
