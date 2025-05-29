@@ -18,7 +18,7 @@
 		</h2>
 	</div>
 	<div
-		class="about-app container  max-w-5xl flex flex-col items-start gap-4 mt-10 m-auto text-gray-100"
+		class="about-app container max-w-5xl flex flex-col items-start gap-4 mt-10 m-auto text-gray-100"
 	>
 		<div class="title text-3xl font-extrabold">
 			<Icon name="fluent-emoji:mobile-phone" />
@@ -93,7 +93,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="about-creator container  max-w-5xl m-auto mt-10 text-gray-100">
+	<div class="about-creator container max-w-5xl m-auto mt-10 text-gray-100">
 		<h1 class="text-3xl font-bold mb-5">
 			<Icon name="fluent-emoji:technologist-light" />
 			Sobre el creador
@@ -123,12 +123,21 @@
 					</h3>
 					<div class="list text-sm font-normal pt-1">
 						<ul class="list-disc list-inside text-gray-100/50">
-							<li>Desarrollador Backend con Node.js y Express.js</li>
-							<li>Creación e integración de APIs y base de datos</li>
-							<li>Maqeutación web con HTML, CSS/SASS/Javascript</li>
-							<li>Desarrollador Full Stack Next.js y Nuxt.js</li>
-							<li>Aplicaciones Progressive Web App (PWA)</li>
-							<li>Desarrollador Backend con Python y Django</li>
+							<li>Desarrollador Backend con Node.js, Express.js y Nest.js</li>
+							<li>Integración de bases de datos PostgreSQL y MongoDB</li>
+							<li>Implementación de JWT para seguridad de APIs</li>
+							<li>Desarrollo de APIs RESTful y documentación técnica</li>
+							<li>Maquetación web con HTML, CSS, JavaScript y Figma</li>
+							<li>Desarrollador Full Stack con Next.js y React</li>
+							<li>Implementación de CI/CD con GitHub Actions y Dockploy</li>
+							<li>Despliegue de servidores Linux con Docker y Nginx</li>
+							<li>Creación de sistemas de facturación electrónica con DIAN</li>
+							<li>Desarrollo de sistemas de notificaciones en tiempo real</li>
+							<li>Scraping y automatización de datos para marketing</li>
+							<li>Diseño y optimización de arquitecturas escalables</li>
+							<li>Implementación de SSR y Auth.js en Next.js</li>
+							<li>Desarrollador Backend con Python</li>
+							<li>Uso de Astro.js combinando React y Vue</li>
 						</ul>
 					</div>
 				</div>
