@@ -61,7 +61,7 @@
 	<!-- End Modal -->
 	<Header :serverStatusH="serverStatus" />
 	<!-- min-h-screen bg-gradient-to-br from-background via-background to-muted/20 -->
-	<div class="container mx-auto text-white py-4 px-8 flex flex-col gap-5">
+	<div class="container max-w-6xl mx-auto text-white py-4 px-8 flex flex-col gap-5">
 		<section
 			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-between rounded-lg flex gap-5"
 		>

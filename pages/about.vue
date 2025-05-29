@@ -1,7 +1,191 @@
 <template>
-	<div>About</div>
+	<div
+		class="header container max-w-5xl flex flex-row items-center justify-start gap-4 mt-10 m-auto"
+	>
+		<NuxtLink
+			class="flex flex-row items-center gap-4 hover:bg-gray-200/20 px-3 py-1 rounded-sm hover:cursor-pointer transition-all"
+			to="/"
+		>
+			<Icon name="meteor-icons:arrow-left" class="text-white" />
+			<button class="text-sm text-white font-thin hover:cursor-pointer">
+				Volver
+			</button>
+		</NuxtLink>
+		<h2
+			class="text-4xl font-extrabold bg-gradient-to-r from-gray-400 to-gray-500 bg-clip-text text-transparent font-stretch-ultra-expanded"
+		>
+			Acerca de Task APP
+		</h2>
+	</div>
+	<div
+		class="about-app container  max-w-5xl flex flex-col items-start gap-4 mt-10 m-auto text-gray-100"
+	>
+		<div class="title text-3xl font-extrabold">
+			<Icon name="fluent-emoji:mobile-phone" />
+			Sobre Task App
+		</div>
+		<p
+			class="text-lg font-normal text-gray-400 mt-4 font-thin font-stretch-condensed"
+		>
+			Task APP es una aplicación moderna de gestión de tareas diseñada para
+			funcionar tanto online como offline. Con un diseño minimalista y efectos
+			visuales elegantes, te permite organizar tus tareas de manera eficiente
+			con estados personalizables y sincronización automática.
+		</p>
+		<div class="features-technologies w-full grid grid-cols-2 gap-4">
+			<div class="features">
+				<h3 class="text-lg font-bold mb-2">
+					<Icon name="fluent-emoji:rocket" />
+					Características
+				</h3>
+				<ul class="list-disc list-inside text-gray-400 mt-2">
+					<li>Funcionalidad offline/online</li>
+					<li>Sincronización automática</li>
+					<li>4 estados de tareas</li>
+					<li>Filtros y búsqueda avanzada</li>
+					<li>Tema oscuro/claro</li>
+				</ul>
+			</div>
+			<div class="technologies">
+				<h3 class="text-lg font-bold mb-2">
+					<Icon name="fluent-emoji:hammer-and-pick" />
+					Tecnologías
+				</h3>
+				<div
+					class="list-disc list-inside text-gray-400 mt-2 flex flex-wrap gap-2"
+				>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						Vue.js 3
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						JavaScript
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						HTML5
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						CSS
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						TypeScript
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						Tawilwind CSS
+					</div>
+					<div
+						class="rounded-full px-2.5 py-0.5 text-sm whitespace-nowrap bg-gray-500/50 text-gray-100 w-fit"
+					>
+						Iconify
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="about-creator container  max-w-5xl m-auto mt-10 text-gray-100">
+		<h1 class="text-3xl font-bold mb-5">
+			<Icon name="fluent-emoji:technologist-light" />
+			Sobre el creador
+		</h1>
+		<div class="flex flex-row items-start">
+			<div class="img w-[320px] h-[320px]">
+				<img
+					src="/assets/img/andres-cardenas.jpg"
+					alt="Andres Cardenas"
+					class="rounded-full w-32 h-32"
+				/>
+			</div>
+			<div class="info flex flex-col gap-5">
+				<div class="name">
+					<h2 class="font-bold">Andres Cardenas</h2>
+					<p class="text-gray-100/50 text-sm">
+						Desarrollador Full Stack apasionado por crear aplicaciones web
+						modernas y funcionales. Especializado en React, Next.js y
+						tecnologías frontend, con experiencia en diseño UX/UI y desarrollo
+						de aplicaciones que funcionan tanto online como offline.
+					</p>
+				</div>
+				<div class="experiencia">
+					<h3 class="font-bold">
+						<Icon name="fluent-emoji:briefcase" />
+						Experiencia:
+					</h3>
+					<div class="list text-sm font-normal pt-1">
+						<ul class="list-disc list-inside text-gray-100/50">
+							<li>Desarrollador Backend con Node.js y Express.js</li>
+							<li>Creación e integración de APIs y base de datos</li>
+							<li>Maqeutación web con HTML, CSS/SASS/Javascript</li>
+							<li>Desarrollador Full Stack Next.js y Nuxt.js</li>
+							<li>Aplicaciones Progressive Web App (PWA)</li>
+							<li>Desarrollador Backend con Python y Django</li>
+						</ul>
+					</div>
+				</div>
+				<div class="contacto flex flex-row gap-4">
+					<a
+						class="button flex flex-row gap-2 items-center justify-center px-4 py-2 rounded-md text-white border border-gray-500/50"
+						rel="noopener noreferrer"
+						aria-label="Email"
+						aria-describedby="link-to-email"
+						data-cy="link-to-email"
+						target="_blank"
+					>
+						<Icon name="mdi:email" />
+						<span>mandrescardenash@gmail.com</span>
+					</a>
+					<a
+						class="button flex flex-row gap-2 items-center justify-center px-4 py-2 rounded-md text-white border border-gray-500/50"
+						href="https://github.com/AndresCardenas29"
+						target="_blank"
+					>
+						<Icon name="simple-icons:refinedgithub" />
+						<span>GitHub</span>
+					</a>
+					<a
+						class="button flex flex-row gap-2 items-center justify-center px-4 py-2 rounded-md text-white border border-gray-500/50"
+						href="https://www.linkedin.com/in/mandrescardenash/"
+						target="_blank"
+					>
+						<Icon name="mdi:linkedin" />
+						<span>LinkedIn</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div
+			class="footer flex flex-col items-center justify-center w-full py-4 text-gray-100/80 text-sm py-16"
+		>
+			<p>
+				Hecho por
+				<a
+					href="https://github.com/AndresCardenas29"
+					target="_blank"
+					class="text-gray-100/90 hover:text-white font-bold underline"
+					>Andres Cardenas</a
+				>
+				usando Nuxt.js
+			</p>
+			<p>© 2025 Task APP. Todos los derechos reservados.</p>
+		</div>
+	</div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+useHead({
+	title: "About Task App | Andres Cardenas",
+});
+</script>
 
 <style></style>
+
