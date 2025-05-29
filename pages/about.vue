@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="header container max-w-5xl flex flex-row items-center justify-start gap-4 mt-10 m-auto"
+		class="header container max-w-5xl flex flex-row items-center justify-start gap-4 mt-10 m-auto p-5"
 	>
 		<NuxtLink
 			class="flex flex-row items-center gap-4 hover:bg-gray-200/20 px-3 py-1 rounded-sm hover:cursor-pointer transition-all"
@@ -18,7 +18,7 @@
 		</h2>
 	</div>
 	<div
-		class="about-app container max-w-5xl flex flex-col items-start gap-4 mt-10 m-auto text-gray-100"
+		class="about-app container max-w-5xl flex flex-col items-start gap-4 mt-10 m-auto text-gray-100 px-10"
 	>
 		<div class="title text-3xl font-extrabold">
 			<Icon name="fluent-emoji:mobile-phone" />
@@ -32,7 +32,7 @@
 			visuales elegantes, te permite organizar tus tareas de manera eficiente
 			con estados personalizables y sincronización automática.
 		</p>
-		<div class="features-technologies w-full grid grid-cols-2 gap-4">
+		<div class="features-technologies w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
 			<div class="features">
 				<h3 class="text-lg font-bold mb-2">
 					<Icon name="fluent-emoji:rocket" />
@@ -93,23 +93,23 @@
 			</div>
 		</div>
 	</div>
-	<div class="about-creator container max-w-5xl m-auto mt-10 text-gray-100">
+	<div class="about-creator container max-w-5xl m-auto mt-10 text-gray-100 px-10">
 		<h1 class="text-3xl font-bold mb-5">
 			<Icon name="fluent-emoji:technologist-light" />
 			Sobre el creador
 		</h1>
-		<div class="flex flex-row items-start">
-			<div class="img w-[320px] h-[320px]">
+		<div class="flex md:flex-row flex-col mb">
+			<div class="img md:w-[320px] w-full flex justify-center mb-8">
 				<img
 					src="/assets/img/andres-cardenas.jpg"
 					alt="Andres Cardenas"
-					class="rounded-full w-32 h-32"
+					class="rounded-full w-50 h-50 md:w-32 md:h-32"
 				/>
 			</div>
 			<div class="info flex flex-col gap-5">
 				<div class="name">
 					<h2 class="font-bold">Andres Cardenas</h2>
-					<p class="text-gray-100/50 text-sm">
+					<p class="text-gray-100/50 text-sm flex-col">
 						Desarrollador Full Stack apasionado por crear aplicaciones web
 						modernas y funcionales. Especializado en React, Next.js y
 						tecnologías frontend, con experiencia en diseño UX/UI y desarrollo
@@ -141,7 +141,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="contacto flex flex-row gap-4">
+				<div class="contacto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full mt-4">
 					<a
 						class="button flex flex-row gap-2 items-center justify-center px-4 py-2 rounded-md text-white border border-gray-500/50"
 						rel="noopener noreferrer"
