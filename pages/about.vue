@@ -175,7 +175,7 @@
 		<div
 			class="footer flex flex-col items-center justify-center w-full py-4 text-gray-100/80 text-sm py-16"
 		>
-			<p>
+			<p class="text-center">
 				Hecho por
 				<a
 					href="https://github.com/AndresCardenas29"
@@ -185,7 +185,7 @@
 				>
 				usando Nuxt.js
 			</p>
-			<p>© 2025 Task APP. Todos los derechos reservados.</p>
+			<p class="text-center">© 2025 Task APP. Todos los derechos reservados.</p>
 		</div>
 	</div>
 </template>
