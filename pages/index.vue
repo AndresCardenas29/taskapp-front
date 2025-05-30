@@ -72,79 +72,11 @@
 		/>
 
 		<!-- Filtros de tareas -->
-		<section
-			class="search new_task border border-gray-400 py-4 px-8 w-full flex items-center justify-start rounded-lg flex gap-2 overflow-hidden overflow-x-auto"
-		>
-			<button
-				type="button"
-				:class="
-					filterSelected === 'all'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
-				"
-				@click="filterSelected = 'all'"
-			>
-				<span class="min-w-18">📋 Todas</span>
-				<span
-					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
-					>{{ filterCounts.all }}</span
-				>
-			</button>
-
-			<button
-				type="button"
-				:class="
-					filterSelected === 'created'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
-				"
-				@click="filterSelected = 'created'"
-			>
-				<Icon name="streamline-emojis:file-folder" class="text-[1.6em]" />
-				<span>Creadas</span>
-				<span
-					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
-					>{{ filterCounts.created }}</span
-				>
-			</button>
-
-			<button
-				type="button"
-				:class="
-					filterSelected === 'doing'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
-				"
-				@click="filterSelected = 'doing'"
-			>
-				<Icon
-					name="streamline-emojis:hourglass-not-done-2"
-					class="text-[1.6em]"
-				/>
-				<span class="min-w-21">En Progreso</span>
-				<span
-					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
-					>{{ filterCounts.doing }}</span
-				>
-			</button>
-
-			<button
-				type="button"
-				:class="
-					filterSelected === 'completed'
-						? 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 bg-white/70 text-black flex flex-row gap-2 item-center justify-center hover:cursor-pointer'
-						: 'focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 hover:bg-white/30 text-white flex flex-row gap-2 item-center justify-center hover:cursor-pointer transition'
-				"
-				@click="filterSelected = 'completed'"
-			>
-				<Icon name="fluent-color:checkmark-circle-20" class="text-[1.6em]" />
-				<span>Completadas</span>
-				<span
-					class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-0 bg-gray-700 text-white"
-					>{{ filterCounts.completed }}</span
-				>
-			</button>
-		</section>
+		<TaskFilters
+			:filterSelected="filterSelected"
+			:filterCounts="filterCounts"
+			@update:filter="filterSelected = $event"
+		/>
 		<!-- Tasks section -->
 		<section
 			:class="
