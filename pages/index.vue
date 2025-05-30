@@ -78,102 +78,76 @@
 			@update:filter="filterSelected = $event"
 		/>
 		<!-- Tasks section -->
-		<section
-			:class="
-				tasks.length == 0
-					? 'rounded-lg border text-card-foreground shadow-sm border-dashed border-2 border-gray-500 flex items-center justify-between space-x-2 bg-black/10'
-					: 'rounded-lg text-card-foreground shadow-sm borborder-gray-700 flex items-center justify-between space-x-2'
-			"
-		>
-			<div
-				class="p-4 flex flex-col items-center justify-center space-x-2 w-full"
-				v-if="tasks.length === 0"
-			>
-				<span class="text-[8em]">📝</span>
-				<h2 class="text-[1.3em] font-bold">No hay tareas</h2>
-				<p class="text-[1em] text-gray-500 mt-3">
-					Comienza agregando tu primera tarea
-				</p>
-			</div>
 
-			<div
-				v-else
-				class="rounded-lg text-card-foreground shadow-sm transition-all hover:shadow-lg w-full flex flex-col gap-4"
-			>
-				<div
-					class="card w-full rounded-lg py-4 px-5 border-1 border-gray-400 flex flex-row gap-2 transition-all overflow-hidden overflow-x-auto"
-					v-for="(task, idx) in filteredTasks"
-					:key="idx"
-					:class="statusClass(task.status)"
-				>
-					<div class="flex-1">
-						<h3>{{ task.title }}</h3>
-						<p class="text-gray-400 text-sm">{{ task.description }}</p>
-						<div class="info flex flex-row gap-4 mt-3">
-							<span class="text-gray-400 text-sm w-30">
-								📅
-								{{
-									task.created_at.getDate() +
-									"/" +
-									(task.created_at.getMonth() + 1) +
-									"/" +
-									task.created_at.getFullYear()
-								}}</span
-							>
+		<TaskList :tasks="filteredTasks" :statusClass="statusClass">
+			<template #default="{ task, idx }">
+				<div class="flex-1">
+					<h3>{{ task.title }}</h3>
+					<p class="text-gray-400 text-sm">{{ task.description }}</p>
+					<div class="info flex flex-row gap-4 mt-3">
+						<span class="text-gray-400 text-sm w-30">
+							📅
+							{{
+								task.created_at.getDate() +
+								"/" +
+								(task.created_at.getMonth() + 1) +
+								"/" +
+								task.created_at.getFullYear()
+							}}</span
+						>
 
-							<div
-								class="border border-gray-700 text-sm px-4 rounded-full py-1 transition-all w-32"
-							>
-								📝 {{ task.status }}
-							</div>
-							<div
-								class="border border-gray-700 text-sm px-4 rounded-full cursor-pointer bg-red-900/70 py-1"
-								v-if="task.pendingSync === true"
-								@click="syncTasks(task)"
-							>
-								Sin sincronizar
-							</div>
-							<div
-								class="border border-gray-700 text-sm px-4 rounded-full cursor-default bg-green-900/70 py-1"
-								v-else
-							>
-								Sincronizado
-							</div>
+						<div
+							class="border border-gray-700 text-sm px-4 rounded-full py-1 transition-all w-32"
+						>
+							📝 {{ task.status }}
 						</div>
-					</div>
-					<div class="flex flex-row items-start justify-center space-x-2">
-						<div class="flex flex-row items-center justify-center space-x-2">
-							<button
-								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1 w-30"
-								@click="startTask(task)"
-							>
-								<Icon
-									name="streamline-emojis:hourglass-not-done-2"
-									class="text-[1em]"
-								/>
-								En Progreso
-							</button>
-							<button
-								class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1"
-								@click="completeTask(task)"
-							>
-								<Icon
-									name="fluent-color:checkmark-circle-20"
-									class="text-[1em]"
-								/>
-								Completar
-							</button>
-							<button
-								class="text-[1.5em] bg-red-900 text-white hover:bg-red-700 flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer"
-								@click="deleteTask(task)"
-							>
-								<Icon name="material-symbols:delete-outline-sharp" />
-							</button>
+						<div
+							class="border border-gray-700 text-sm px-4 rounded-full cursor-pointer bg-red-900/70 py-1"
+							v-if="task.pendingSync === true"
+							@click="syncTasks(task)"
+						>
+							Sin sincronizar
+						</div>
+						<div
+							class="border border-gray-700 text-sm px-4 rounded-full cursor-default bg-green-900/70 py-1"
+							v-else
+						>
+							Sincronizado
 						</div>
 					</div>
 				</div>
-			</div>
-		</section>
+				<div class="flex flex-row items-start justify-center space-x-2">
+					<div class="flex flex-row items-center justify-center space-x-2">
+						<button
+							class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1 w-30"
+							@click="startTask(task)"
+						>
+							<Icon
+								name="streamline-emojis:hourglass-not-done-2"
+								class="text-[1em]"
+							/>
+							En Progreso
+						</button>
+						<button
+							class="border py-1 px-2 border-gray-500 flex items-center justify-center rounded-lg cursor-pointer text-sm gap-1"
+							@click="completeTask(task)"
+						>
+							<Icon
+								name="fluent-color:checkmark-circle-20"
+								class="text-[1em]"
+							/>
+							Completar
+						</button>
+						<button
+							class="text-[1.5em] bg-red-900 text-white hover:bg-red-700 flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer"
+							@click="deleteTask(task)"
+						>
+							<Icon name="material-symbols:delete-outline-sharp" />
+						</button>
+					</div>
+				</div>
+			</template>
+		</TaskList>
 	</div>
 </template>
 
